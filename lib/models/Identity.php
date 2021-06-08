@@ -477,7 +477,7 @@ class Identity implements ModelInterface, ArrayAccess
 		return $this;
 	}
 
-	public function getMetadata(): string
+	public function getMetadata(): ?\Passbase\models\IdentityMetadata
 	{
 		return $this->container['metadata'];
 	}
