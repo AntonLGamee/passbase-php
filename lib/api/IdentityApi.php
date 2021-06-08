@@ -128,9 +128,97 @@ class IdentityApi
      */
     public function getIdentityById($id)
     {
-        list($response) = $this->getIdentityByIdWithHttpInfo($id);
+        list($response) = $this->getIdentityByIdWithHttpInfo2($id);
         return $response;
     }
+
+	/**
+	 * Operation getIdentityByIdWithHttpInfo
+	 *
+	 * Get identity
+	 *
+	 * @param  string $id Unique ID of the identity to return (required)
+	 *
+	 * @throws \Passbase\ApiException on non-2xx response
+	 * @throws \InvalidArgumentException
+	 * @return array of \Passbase\models\Identity, HTTP status code, HTTP response headers (array of strings)
+	 */
+	public function getIdentityByIdWithHttpInfo2($id)
+	{
+		$request = $this->getIdentityByIdRequest($id);
+
+		try {
+			$options = $this->createHttpClientOption();
+			try {
+				$response = $this->client->send($request, $options);
+			} catch (RequestException $e) {
+				throw new ApiException(
+					"[{$e->getCode()}] {$e->getMessage()}",
+					$e->getCode(),
+					$e->getResponse() ? $e->getResponse()->getHeaders() : null,
+					$e->getResponse() ? (string) $e->getResponse()->getBody() : null
+				);
+			}
+
+			$statusCode = $response->getStatusCode();
+
+			if ($statusCode < 200 || $statusCode > 299) {
+				throw new ApiException(
+					sprintf(
+						'[%d] Error connecting to the API (%s)',
+						$statusCode,
+						$request->getUri()
+					),
+					$statusCode,
+					$response->getHeaders(),
+					$response->getBody()
+				);
+			}
+
+			$responseBody = $response->getBody();
+			switch($statusCode) {
+				case 200:
+					if ('\Passbase\models\Identity' === '\SplFileObject') {
+						$content = $responseBody; //stream goes to serializer
+					} else {
+						$content = (string) $responseBody;
+					}
+
+					return [
+						$content,
+						$response->getStatusCode(),
+						$response->getHeaders()
+					];
+			}
+
+			$returnType = '\Passbase\models\Identity';
+			$responseBody = $response->getBody();
+			if ($returnType === '\SplFileObject') {
+				$content = $responseBody; //stream goes to serializer
+			} else {
+				$content = (string) $responseBody;
+			}
+
+			return [
+				$content,
+				$response->getStatusCode(),
+				$response->getHeaders()
+			];
+
+		} catch (ApiException $e) {
+			switch ($e->getCode()) {
+				case 200:
+					$data = ObjectSerializer::deserialize(
+						$e->getResponseBody(),
+						'\Passbase\models\Identity',
+						$e->getResponseHeaders()
+					);
+					$e->setResponseObject($data);
+					break;
+			}
+			throw $e;
+		}
+	}
 
     /**
      * Operation getIdentityByIdWithHttpInfo
