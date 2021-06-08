@@ -39,6 +39,7 @@ lib/models/ResourceFile.php
 lib/models/ResourceInput.php
 lib/models/User.php
 lib/models/WatchlistResponse.php
+lib/models/IdentityMetadata.php
 phpunit.xml.dist
 test/Api/IdentityApiTest.php
 test/Api/ProjectApiTest.php
