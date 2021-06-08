@@ -57,7 +57,7 @@ class Identity implements ModelInterface, ArrayAccess
 		'updated' => 'int',
 		'resources' => '\Passbase\models\IdentityResource[]',
 		'watchlist' => '\Passbase\models\WatchlistResponse',
-		'metadata' => 'string'
+		'metadata' => '\Passbase\models\IdentityMetadata'
 	];
 
 	/**
@@ -483,7 +483,7 @@ class Identity implements ModelInterface, ArrayAccess
 	}
 
 
-	public function setMetadata(string $metadata): Identity
+	public function setMetadata(?\Passbase\models\IdentityMetadata $metadata): Identity
 	{
 		$this->container['metadata'] = $metadata;
 
