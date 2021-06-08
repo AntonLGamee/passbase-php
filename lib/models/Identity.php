@@ -57,7 +57,7 @@ class Identity implements ModelInterface, ArrayAccess
 		'updated' => 'int',
 		'resources' => '\Passbase\models\IdentityResource[]',
 		'watchlist' => '\Passbase\models\WatchlistResponse',
-		'metadata' => '\stdClass'
+		'metadata' => 'string'
 	];
 
 	/**
@@ -234,7 +234,7 @@ class Identity implements ModelInterface, ArrayAccess
 		$this->container['updated'] = $data['updated'] ?? null;
 		$this->container['resources'] = $data['resources'] ?? null;
 		$this->container['watchlist'] = $data['watchlist'] ?? null;
-		$this->container['metadata'] = isset($data['metadata']) ? json_decode($data['metadata'], false) : null;
+		$this->container['metadata'] = $data['metadata'] ?? null;
 	}
 
 
@@ -477,13 +477,13 @@ class Identity implements ModelInterface, ArrayAccess
 		return $this;
 	}
 
-	public function getMetadata(): \stdClass
+	public function getMetadata(): string
 	{
 		return $this->container['metadata'];
 	}
 
 
-	public function setMetadata(\stdClass $metadata): Identity
+	public function setMetadata(string $metadata): Identity
 	{
 		$this->container['metadata'] = $metadata;
 
